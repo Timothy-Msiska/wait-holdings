@@ -77,7 +77,7 @@ export function AboutSection() {
             className="relative h-[420px] rounded-2xl overflow-hidden shadow-xl"
           >
             <img
-              src="/images/modern-agricultural-laboratory-with-scientists.jpg"
+              src="/images/Lab-b.jpg"
               alt="Modern agricultural laboratory"
               className="w-full h-full object-cover"
             />

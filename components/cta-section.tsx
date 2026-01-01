@@ -1,120 +1,149 @@
+"use client"
+
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { ArrowRight, Phone, Mail, MapPin } from "lucide-react"
+import { motion } from "framer-motion"
 
 export function CTASection() {
+  const features = [
+    {
+      title: "Proven Track Record",
+      description:
+        "Years of experience delivering results that transform agricultural productivity",
+    },
+    {
+      title: "Scientific Approach",
+      description:
+        "Data-driven solutions backed by rigorous laboratory testing and research",
+    },
+    {
+      title: "Comprehensive Support",
+      description:
+        "From soil testing to ongoing agronomic consultation, we're with you every step",
+    },
+    {
+      title: "Quality Assurance",
+      description:
+        "ISO-certified processes ensuring consistent product quality and performance",
+    },
+  ]
+
   return (
-    <section id="contact" className="py-20">
+    <section id="contact" className="py-20 bg-muted/10">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
-          <div>
-            <h2 className="text-3xl sm:text-4xl font-bold mb-6 text-balance">Why You Should Recommend Us</h2>
-            <div className="space-y-4 mb-8">
-              <div className="flex items-start gap-3">
-                <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0 mt-1">
-                  <div className="w-2 h-2 rounded-full bg-primary" />
-                </div>
-                <div>
-                  <h3 className="font-semibold mb-1">Proven Track Record</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Years of experience delivering results that transform agricultural productivity
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0 mt-1">
-                  <div className="w-2 h-2 rounded-full bg-primary" />
-                </div>
-                <div>
-                  <h3 className="font-semibold mb-1">Scientific Approach</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Data-driven solutions backed by rigorous laboratory testing and research
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0 mt-1">
-                  <div className="w-2 h-2 rounded-full bg-primary" />
-                </div>
-                <div>
-                  <h3 className="font-semibold mb-1">Comprehensive Support</h3>
-                  <p className="text-sm text-muted-foreground">
-                    From soil testing to ongoing agronomic consultation, we're with you every step
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0 mt-1">
-                  <div className="w-2 h-2 rounded-full bg-primary" />
-                </div>
-                <div>
-                  <h3 className="font-semibold mb-1">Quality Assurance</h3>
-                  <p className="text-sm text-muted-foreground">
-                    ISO-certified processes ensuring consistent product quality and performance
-                  </p>
-                </div>
-              </div>
+          {/* Left: Why Recommend Us */}
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+          >
+            <h2 className="text-3xl sm:text-4xl font-bold mb-8 text-balance">
+              Why You Should Recommend Us
+            </h2>
+
+            <div className="space-y-6 mb-8">
+              {features.map((feature, idx) => (
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, amount: 0.3 }}
+                  transition={{ duration: 0.5, delay: idx * 0.15 }}
+                  className="flex items-start gap-4"
+                >
+                  <div className="w-7 h-7 flex-shrink-0 flex items-center justify-center mt-1">
+                    <div className="w-3 h-3 rounded-full bg-primary animate-pulse" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold mb-1 text-lg">{feature.title}</h3>
+                    <p className="text-sm text-muted-foreground">{feature.description}</p>
+                  </div>
+                </motion.div>
+              ))}
             </div>
-            <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90">
-              Partner With Us
-              <ArrowRight className="ml-2 h-4 w-4" />
+
+            <Button
+              size="lg"
+              className="bg-primary text-primary-foreground hover:bg-primary/90 flex items-center gap-2"
+            >
+              Partner With Us <ArrowRight className="h-4 w-4" />
             </Button>
-          </div>
+          </motion.div>
 
-          <Card>
-            <CardContent className="pt-6">
-              <h3 className="text-2xl font-bold mb-6">Get In Touch</h3>
-              <div className="space-y-4">
-                <div className="flex items-start gap-3">
-                  <MapPin className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
-                  <div>
-                    <p className="font-medium">Our Location</p>
-                    <p className="text-sm text-muted-foreground">Blantyre, Malawi</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <Phone className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
-                  <div>
-                    <p className="font-medium">Phone</p>
-                    <p className="text-sm text-muted-foreground">+265 XXX XXX XXX</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <Mail className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
-                  <div>
-                    <p className="font-medium">Email</p>
-                    <p className="text-sm text-muted-foreground">info@waitholdings.com</p>
-                  </div>
-                </div>
-              </div>
+          {/* Right: Contact Card */}
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+          >
+            <Card className="shadow-lg rounded-2xl border border-muted-foreground/20 backdrop-blur-md">
+              <CardContent className="pt-6 px-8">
+                <h3 className="text-2xl font-bold mb-6">Get In Touch</h3>
 
-              <div className="mt-8 pt-8 border-t border-border">
-                <h4 className="font-semibold mb-4">Request a Consultation</h4>
-                <form className="space-y-4">
-                  <input
-                    type="text"
-                    placeholder="Your Name"
-                    className="w-full px-4 py-2 rounded-md border border-input bg-background text-sm"
-                  />
-                  <input
-                    type="email"
-                    placeholder="Your Email"
-                    className="w-full px-4 py-2 rounded-md border border-input bg-background text-sm"
-                  />
-                  <textarea
-                    placeholder="Your Message"
-                    rows={4}
-                    className="w-full px-4 py-2 rounded-md border border-input bg-background text-sm resize-none"
-                  />
-                  <Button type="submit" className="w-full bg-primary text-primary-foreground hover:bg-primary/90">
-                    Send Message
-                  </Button>
-                </form>
-              </div>
-            </CardContent>
-          </Card>
+                {/* Contact Info */}
+                <div className="space-y-5">
+                  <ContactItem icon={MapPin} title="Our Location" subtitle="Blantyre, Malawi" />
+                  <ContactItem icon={Phone} title="Phone" subtitle="+265 XXX XXX XXX" />
+                  <ContactItem icon={Mail} title="Email" subtitle="info@waitholdings.com" />
+                </div>
+
+                {/* Contact Form */}
+                <div className="mt-8 pt-8 border-t border-border">
+                  <h4 className="font-semibold mb-4 text-lg">Request a Consultation</h4>
+                  <form className="space-y-4">
+                    <input
+                      type="text"
+                      placeholder="Your Name"
+                      className="w-full px-4 py-3 rounded-lg border border-input bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    />
+                    <input
+                      type="email"
+                      placeholder="Your Email"
+                      className="w-full px-4 py-3 rounded-lg border border-input bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    />
+                    <textarea
+                      placeholder="Your Message"
+                      rows={4}
+                      className="w-full px-4 py-3 rounded-lg border border-input bg-background text-sm resize-none focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    />
+                    <Button
+                      type="submit"
+                      className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
+                    >
+                      Send Message
+                    </Button>
+                  </form>
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
         </div>
       </div>
     </section>
+  )
+}
+
+// Contact Item Component
+function ContactItem({
+  icon: Icon,
+  title,
+  subtitle,
+}: {
+  icon: React.ElementType
+  title: string
+  subtitle: string
+}) {
+  return (
+    <div className="flex items-start gap-3">
+      <Icon className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
+      <div>
+        <p className="font-medium">{title}</p>
+        <p className="text-sm text-muted-foreground">{subtitle}</p>
+      </div>
+    </div>
   )
 }
