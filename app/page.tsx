@@ -1,6 +1,7 @@
 "use client"
 
 import { Hero } from "@/components/hero"
+import { MlimifertSection } from "@/components/mlinifert-section"
 import { AboutSection } from "@/components/about-section"
 import { ServicesSection } from "@/components/services-section"
 import { TechnologySection } from "@/components/technology-section"
@@ -112,6 +113,7 @@ export default function Page() {
             className="relative z-0"
           >
             <Hero />
+            <MlimifertSection />
             <AboutSection />
             <ServicesSection />
             <TechnologySection />

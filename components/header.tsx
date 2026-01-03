@@ -1,13 +1,14 @@
 "use client"
 
-import { useEffect, useState, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import Image from "next/image"
-import { Button } from "@/components/ui/button"
+import clsx from "clsx"
 import { Menu } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
-import clsx from "clsx"
+import { Button } from "@/components/ui/button"
 
 const navigation = [
+  { name: "MliniFert", href: "#mlinifert" },
   { name: "About", href: "#about" },
   { name: "Services", href: "#services" },
   { name: "Technology", href: "#technology" },
@@ -16,56 +17,78 @@ const navigation = [
 ]
 
 export function Header() {
-  const [open, setOpen] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [active, setActive] = useState("")
   const [showHeader, setShowHeader] = useState(true)
-  const lastScroll = useRef(0)
 
-  // Detect scroll direction
+  const lastScrollY = useRef(0)
+  const headerHeight = 96 // Adjust if your header height changes
+
+  /* ---------------- Scroll behavior ---------------- */
   useEffect(() => {
-    const handleScroll = () => {
-      const currentScroll = window.scrollY
-      setScrolled(currentScroll > 40)
+    const onScroll = () => {
+      const currentY = window.scrollY
+      setScrolled(currentY > 40)
 
-      if (currentScroll > lastScroll.current && currentScroll > 100) {
-        // scrolling down
+      if (currentY > lastScrollY.current && currentY > 120) {
         setShowHeader(false)
       } else {
-        // scrolling up
         setShowHeader(true)
       }
-      lastScroll.current = currentScroll
+
+      lastScrollY.current = currentY
     }
 
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
+    window.addEventListener("scroll", onScroll)
+    return () => window.removeEventListener("scroll", onScroll)
   }, [])
 
-  // Active section detection
+  /* ---------------- Active section detection ---------------- */
   useEffect(() => {
-    const sections = navigation.map((n) =>
-      document.querySelector(n.href)
-    )
+    const sections = navigation
+      .map((item) => document.querySelector(item.href))
+      .filter((el): el is Element => el !== null)
+
     const observer = new IntersectionObserver(
       (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) setActive(`#${entry.target.id}`)
-        })
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort(
+            (a, b) =>
+              a.boundingClientRect.top - b.boundingClientRect.top
+          )
+
+        if (visible.length > 0) {
+          setActive(`#${visible[0].target.id}`)
+        }
       },
-      { rootMargin: "-45% 0px -45% 0px" }
+      { rootMargin: `-${headerHeight / 2}px 0px -50% 0px` }
     )
 
-    sections.forEach((sec) => sec && observer.observe(sec))
+    sections.forEach((section) => observer.observe(section))
     return () => observer.disconnect()
   }, [])
+
+  /* ---------------- Scroll to section with offset ---------------- */
+  const handleScrollTo = (href: string) => {
+    const element = document.querySelector(href)
+    if (!element) return
+
+    const top = element.getBoundingClientRect().top + window.scrollY
+    window.scrollTo({
+      top: top - headerHeight + 2, // offset so header doesn’t cover it
+      behavior: "smooth",
+    })
+    setMenuOpen(false) // close mobile menu
+  }
 
   return (
     <motion.header
       initial={false}
       animate={{
+        y: showHeader ? 0 : -110,
         paddingTop: scrolled ? 8 : 16,
-        y: showHeader ? 0 : -100,
       }}
       transition={{ duration: 0.25, ease: "easeOut" }}
       className="fixed top-0 z-50 w-full"
@@ -82,10 +105,17 @@ export function Header() {
         >
           <nav className="grid h-[72px] grid-cols-3 items-center px-6">
 
-            {/* Left — Logo */}
+            {/* LOGO → Scroll to Home */}
             <motion.a
-              href="/"
+              href="#home"
               className="flex items-center"
+              onClick={(e) => {
+                e.preventDefault()
+                window.scrollTo({
+                  top: 0,
+                  behavior: "smooth",
+                })
+              }}
               animate={{ scale: scrolled ? 0.95 : 1 }}
               transition={{ duration: 0.25 }}
             >
@@ -99,38 +129,45 @@ export function Header() {
               />
             </motion.a>
 
-            {/* Center Navigation */}
+            {/* DESKTOP NAV */}
             <div className="hidden md:flex justify-center gap-10">
               {navigation.map((item) => {
                 const isActive = active === item.href
+
                 return (
-                  <a
+                  <button
                     key={item.name}
-                    href={item.href}
+                    onClick={() => handleScrollTo(item.href)}
                     className={clsx(
-                      "relative text-sm font-medium transition-colors duration-200",
+                      "relative text-sm font-medium transition-colors",
                       isActive
                         ? "text-foreground"
                         : "text-muted-foreground hover:text-foreground"
                     )}
                   >
                     {item.name}
+
                     {isActive && (
                       <motion.span
                         layoutId="nav-indicator"
-                        transition={{ type: "spring", stiffness: 380, damping: 30 }}
                         className="absolute -bottom-1 left-0 h-[2px] w-full rounded-full bg-primary"
+                        transition={{
+                          type: "spring",
+                          stiffness: 380,
+                          damping: 30,
+                        }}
                       />
                     )}
-                  </a>
+                  </button>
                 )
               })}
             </div>
 
-            {/* Right — CTA & Mobile Menu */}
-            <div className="flex justify-end items-center gap-2">
+            {/* CTA + MOBILE MENU */}
+            <div className="flex items-center justify-end gap-2">
               <Button
-                className="hidden md:inline-flex rounded-full px-6
+                className="
+                  hidden md:inline-flex rounded-full px-6
                   bg-gradient-to-r from-primary to-primary/80
                   shadow-md shadow-primary/20
                   hover:shadow-lg hover:shadow-primary/30
@@ -140,9 +177,8 @@ export function Header() {
                 Book Consultation
               </Button>
 
-              {/* Mobile Menu Button on far right */}
               <button
-                onClick={() => setOpen(!open)}
+                onClick={() => setMenuOpen((v) => !v)}
                 className="md:hidden ml-auto rounded-xl border border-border p-2"
               >
                 <Menu className="h-5 w-5" />
@@ -150,9 +186,9 @@ export function Header() {
             </div>
           </nav>
 
-          {/* Mobile Menu */}
+          {/* MOBILE MENU */}
           <AnimatePresence>
-            {open && (
+            {menuOpen && (
               <motion.div
                 initial={{ height: 0, opacity: 0 }}
                 animate={{ height: "auto", opacity: 1 }}
@@ -162,14 +198,13 @@ export function Header() {
               >
                 <div className="flex flex-col gap-6 px-6 pb-6">
                   {navigation.map((item) => (
-                    <a
+                    <button
                       key={item.name}
-                      href={item.href}
-                      onClick={() => setOpen(false)}
-                      className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+                      onClick={() => handleScrollTo(item.href)}
+                      className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors text-left w-full"
                     >
                       {item.name}
-                    </a>
+                    </button>
                   ))}
 
                   <Button className="w-full rounded-full">
