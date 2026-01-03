@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button"
 
 const navigation = [
   { name: "Home", href: "#home" },
-  { name: "MliniFert", href: "#mlinifert" },
+  { name: "MlimiFert", href: "#mlimifert" },
   { name: "About", href: "#about" },
   { name: "Services", href: "#services" },
   { name: "Technology", href: "#technology" },
