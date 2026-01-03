@@ -19,47 +19,44 @@ const navigation = [
 export function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
-  const [active, setActive] = useState("")
+  const [active, setActive] = useState("#home")
+  const [hovered, setHovered] = useState<string | null>(null)
   const [showHeader, setShowHeader] = useState(true)
 
   const lastScrollY = useRef(0)
   const headerHeight = 96
 
-  /* ---------------- Scroll behavior ---------------- */
+  // ---------------- Scroll behavior ----------------
   useEffect(() => {
     const onScroll = () => {
       const currentY = window.scrollY
       setScrolled(currentY > 40)
-
       if (currentY > lastScrollY.current && currentY > 120) {
         setShowHeader(false)
       } else {
         setShowHeader(true)
       }
-
       lastScrollY.current = currentY
     }
-
     window.addEventListener("scroll", onScroll)
     return () => window.removeEventListener("scroll", onScroll)
   }, [])
 
-  /* ---------------- Active section detection ---------------- */
+  // ---------------- Active section detection ----------------
   useEffect(() => {
-    const sections = navigation
-      .map((item) => document.querySelector(item.href))
-      .filter((el): el is Element => el !== null)
+    const sections = [
+      { id: "home" },
+      ...navigation.map((item) => ({ id: item.href.replace("#", "") })),
+    ].map((item) => document.getElementById(item.id))
+      .filter((el): el is HTMLElement => el !== null)
 
     const observer = new IntersectionObserver(
       (entries) => {
         const visible = entries
-          .filter((e) => e.isIntersecting)
-          .sort(
-            (a, b) => a.boundingClientRect.top - b.boundingClientRect.top
-          )
-
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)
         if (visible.length > 0) {
-          setActive(`#${visible[0].target.id}`)
+          setActive(`#${(visible[0].target as HTMLElement).id}`)
         }
       },
       { rootMargin: `-${headerHeight / 2}px 0px -50% 0px` }
@@ -69,11 +66,10 @@ export function Header() {
     return () => observer.disconnect()
   }, [])
 
-  /* ---------------- Scroll to section with offset ---------------- */
+  // ---------------- Scroll to section with offset ----------------
   const handleScrollTo = (href: string) => {
     const element = document.querySelector(href)
     if (!element) return
-
     const top = element.getBoundingClientRect().top + window.scrollY
     window.scrollTo({
       top: top - headerHeight + 2,
@@ -109,10 +105,7 @@ export function Header() {
               className="flex items-center"
               onClick={(e) => {
                 e.preventDefault()
-                window.scrollTo({
-                  top: 0,
-                  behavior: "smooth",
-                })
+                window.scrollTo({ top: 0, behavior: "smooth" })
               }}
               animate={{ scale: scrolled ? 0.95 : 1 }}
               transition={{ duration: 0.25 }}
@@ -128,22 +121,25 @@ export function Header() {
             </motion.a>
 
             {/* DESKTOP NAV */}
-            <div className="hidden md:flex justify-center gap-10">
+            <div className="hidden md:flex justify-center gap-10 relative">
               {navigation.map((item) => {
                 const isActive = active === item.href
+                const isHover = hovered === item.href
                 return (
                   <button
                     key={item.name}
                     onClick={() => handleScrollTo(item.href)}
+                    onMouseEnter={() => setHovered(item.href)}
+                    onMouseLeave={() => setHovered(null)}
                     className={clsx(
                       "relative text-sm font-medium transition-colors",
-                      isActive
+                      isActive || isHover
                         ? "text-foreground"
                         : "text-muted-foreground hover:text-foreground"
                     )}
                   >
                     {item.name}
-                    {isActive && (
+                    {(isActive || isHover) && (
                       <motion.span
                         layoutId="nav-indicator"
                         className="absolute -bottom-1 left-0 h-[2px] w-full rounded-full bg-primary"
@@ -158,13 +154,11 @@ export function Header() {
             {/* CTA + MOBILE MENU */}
             <div className="flex items-center justify-end gap-2">
               <Button
-                className="
-                  hidden md:inline-flex rounded-full px-6
-                  bg-gradient-to-r from-primary to-primary/80
-                  shadow-md shadow-primary/20
-                  hover:shadow-lg hover:shadow-primary/30
-                  transition-all duration-300
-                "
+                className="hidden md:inline-flex rounded-full px-6
+                bg-gradient-to-r from-primary to-primary/80
+                shadow-md shadow-primary/20
+                hover:shadow-lg hover:shadow-primary/30
+                transition-all duration-300"
               >
                 Book Consultation
               </Button>
@@ -206,7 +200,6 @@ export function Header() {
                       </button>
                     )
                   })}
-
                   <Button className="w-full rounded-full">Book Consultation</Button>
                 </div>
               </motion.div>
