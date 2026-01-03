@@ -12,47 +12,8 @@ import { CTASection } from "@/components/cta-section"
 import { motion, AnimatePresence } from "framer-motion"
 import { useEffect, useState } from "react"
 
-// Colors based on your website: primary blue and logo leaves
+// Primary color for loader
 const primaryColor = "#18bef0"
-const leafColors = ["#0c0c0c", "#0c0c0c", "#0c0c0c"] // shades for leaves
-
-// Big Stem with 3 leaves SVG
-const StemWithLeaves = () => (
-  <svg
-    width="120"
-    height="120"
-    viewBox="0 0 64 64"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    {/* Stem */}
-    <line x1="32" y1="32" x2="32" y2="5" stroke={primaryColor} strokeWidth="3" strokeLinecap="round" />
-
-    {/* Leaf 1 */}
-    <path
-      d="M32 10 C45 0, 55 10, 45 20"
-      fill={leafColors[0]}
-      stroke={primaryColor}
-      strokeWidth="1"
-    />
-
-    {/* Leaf 2 */}
-    <path
-      d="M32 18 C42 8, 55 18, 50 28"
-      fill={leafColors[1]}
-      stroke={primaryColor}
-      strokeWidth="1"
-    />
-
-    {/* Leaf 3 */}
-    <path
-      d="M32 26 C40 16, 53 26, 48 36"
-      fill={leafColors[2]}
-      stroke={primaryColor}
-      strokeWidth="1"
-    />
-  </svg>
-)
 
 export default function Page() {
   const [loading, setLoading] = useState(true)
@@ -80,14 +41,12 @@ export default function Page() {
             initial={{ opacity: 1 }}
             exit={{ opacity: 0, transition: { duration: 0.5 } }}
           >
-            {/* Rotating Stem + Leaves */}
+            {/* Simple spinning circle */}
             <motion.div
-              className="w-32 h-32"
+              className="w-16 h-16 border-4 border-t-primary border-gray-300 rounded-full"
               animate={{ rotate: 360 }}
-              transition={{ repeat: Infinity, duration: 2, ease: "linear" }}
-            >
-              <StemWithLeaves />
-            </motion.div>
+              transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+            />
 
             {/* Loading Text */}
             <motion.p
