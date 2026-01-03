@@ -23,7 +23,7 @@ export function Header() {
   const [showHeader, setShowHeader] = useState(true)
 
   const lastScrollY = useRef(0)
-  const headerHeight = 96 // Adjust if your header height changes
+  const headerHeight = 96
 
   /* ---------------- Scroll behavior ---------------- */
   useEffect(() => {
@@ -55,8 +55,7 @@ export function Header() {
         const visible = entries
           .filter((e) => e.isIntersecting)
           .sort(
-            (a, b) =>
-              a.boundingClientRect.top - b.boundingClientRect.top
+            (a, b) => a.boundingClientRect.top - b.boundingClientRect.top
           )
 
         if (visible.length > 0) {
@@ -77,10 +76,10 @@ export function Header() {
 
     const top = element.getBoundingClientRect().top + window.scrollY
     window.scrollTo({
-      top: top - headerHeight + 2, // offset so header doesn’t cover it
+      top: top - headerHeight + 2,
       behavior: "smooth",
     })
-    setMenuOpen(false) // close mobile menu
+    setMenuOpen(false)
   }
 
   return (
@@ -104,7 +103,6 @@ export function Header() {
           )}
         >
           <nav className="grid h-[72px] grid-cols-3 items-center px-6">
-
             {/* LOGO → Scroll to Home */}
             <motion.a
               href="#home"
@@ -133,7 +131,6 @@ export function Header() {
             <div className="hidden md:flex justify-center gap-10">
               {navigation.map((item) => {
                 const isActive = active === item.href
-
                 return (
                   <button
                     key={item.name}
@@ -146,16 +143,11 @@ export function Header() {
                     )}
                   >
                     {item.name}
-
                     {isActive && (
                       <motion.span
                         layoutId="nav-indicator"
                         className="absolute -bottom-1 left-0 h-[2px] w-full rounded-full bg-primary"
-                        transition={{
-                          type: "spring",
-                          stiffness: 380,
-                          damping: 30,
-                        }}
+                        transition={{ type: "spring", stiffness: 380, damping: 30 }}
                       />
                     )}
                   </button>
@@ -197,19 +189,25 @@ export function Header() {
                 className="md:hidden overflow-hidden"
               >
                 <div className="flex flex-col gap-6 px-6 pb-6">
-                  {navigation.map((item) => (
-                    <button
-                      key={item.name}
-                      onClick={() => handleScrollTo(item.href)}
-                      className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors text-left w-full"
-                    >
-                      {item.name}
-                    </button>
-                  ))}
+                  {navigation.map((item) => {
+                    const isActive = active === item.href
+                    return (
+                      <button
+                        key={item.name}
+                        onClick={() => handleScrollTo(item.href)}
+                        className={clsx(
+                          "text-sm font-medium text-left w-full transition-colors",
+                          isActive
+                            ? "text-foreground underline underline-offset-4"
+                            : "text-muted-foreground hover:text-foreground"
+                        )}
+                      >
+                        {item.name}
+                      </button>
+                    )
+                  })}
 
-                  <Button className="w-full rounded-full">
-                    Book Consultation
-                  </Button>
+                  <Button className="w-full rounded-full">Book Consultation</Button>
                 </div>
               </motion.div>
             )}

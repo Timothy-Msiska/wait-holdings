@@ -86,9 +86,36 @@ export function CTASection() {
 
                 {/* Contact Info */}
                 <div className="space-y-5">
-                  <ContactItem icon={MapPin} title="Our Location" subtitle="Blantyre, Malawi" />
-                  <ContactItem icon={Phone} title="Phone" subtitle="+265 XXX XXX XXX" />
-                  <ContactItem icon={Mail} title="Email" subtitle="info@waitholdings.com" />
+                  <ContactItem
+                    icon={MapPin}
+                    title="Our Location"
+                    subtitle={
+                      <>
+                        WAIT Holdings Ltd<br />
+                        Along M1 Road<br />
+                        P.O. Box 245<br />
+                        Lunzu<br />
+                        Blantyre
+                      </>
+                    }
+                  />
+                  <ContactItem
+                    icon={Phone}
+                    title="Phone"
+                    subtitle="+265 997 906 959"
+                  />
+                  <ContactItem
+                    icon={Mail}
+                    title="Email"
+                    subtitle={
+                      <a
+                        href="mailto:info@waitholdingsltd.com"
+                        className="text-primary underline"
+                      >
+                        info@waitholdingsltd.com
+                      </a>
+                    }
+                  />
                 </div>
 
                 {/* Contact Form */}
@@ -135,7 +162,7 @@ function ContactItem({
 }: {
   icon: React.ElementType
   title: string
-  subtitle: string
+  subtitle: React.ReactNode
 }) {
   return (
     <div className="flex items-start gap-3">

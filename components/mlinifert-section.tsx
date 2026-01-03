@@ -8,7 +8,6 @@ import {
   TrendingUp,
   ShieldCheck,
   CheckCircle,
-  XCircle,
 } from "lucide-react"
 
 export function MlimifertSection() {
@@ -17,7 +16,6 @@ export function MlimifertSection() {
       {/* ===== MLIMIFERT OVERVIEW ===== */}
       <section className="relative py-28 bg-[#f7fcfd] overflow-hidden">
         <div className="container mx-auto px-6">
-
           {/* BRAND INTRO */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -39,8 +37,7 @@ export function MlimifertSection() {
 
           {/* PRODUCT FEATURE SECTION */}
           <div className="mt-24 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-
-            {/* IMAGE */}
+            {/* PRODUCT IMAGE */}
             <motion.div
               initial={{ opacity: 0, x: -40 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -53,7 +50,7 @@ export function MlimifertSection() {
                   src="/images/mlini-fert.png"
                   alt="Mlimifert Urea 46%N 50kg"
                   fill
-                  className="object-contain p-0"
+                  className="object-contain"
                   priority
                 />
               </div>
@@ -87,7 +84,7 @@ export function MlimifertSection() {
             </motion.div>
           </div>
 
-          {/* CORE VALUES / SERVICES STYLE */}
+          {/* CORE VALUES / SERVICES */}
           <div className="mt-28 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
             {coreValues.map((item, index) => (
               <motion.div
@@ -110,14 +107,12 @@ export function MlimifertSection() {
               </motion.div>
             ))}
           </div>
-
         </div>
       </section>
 
       {/* ===== MLIMIFERT BENEFITS & APPLICATIONS ===== */}
       <section className="relative py-28 bg-white overflow-hidden">
         <div className="container mx-auto px-6">
-
           {/* SECTION HEADER */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -134,24 +129,22 @@ export function MlimifertSection() {
             </p>
           </motion.div>
 
-          {/* BENEFIT CARDS */}
-          <div className="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+          {/* BENEFIT CARDS (2x3 / 3x2 Grid) */}
+          <div className="mt-16 grid gap-6 sm:grid-cols-2 md:grid-cols-3 justify-items-center">
             {mlimifertBenefits.map((item, index) => (
               <motion.div
                 key={item.title}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
+                transition={{ duration: 0.6, delay: index * 0.15 }}
                 viewport={{ once: true }}
-                className="bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition"
+                className="w-full max-w-sm bg-white rounded-2xl p-6 shadow-md hover:shadow-xl hover:scale-105 transition-transform duration-300"
               >
                 <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
                   <item.icon className="w-6 h-6 text-primary" />
                 </div>
-                <h4 className="text-xl font-semibold text-[#0c0c0c] mb-2">
-                  {item.title}
-                </h4>
-                <p className="text-gray-600 leading-relaxed">{item.description}</p>
+                <h4 className="text-xl font-semibold text-[#0c0c0c] mb-2 text-center">{item.title}</h4>
+                <p className="text-gray-600 leading-relaxed text-center">{item.description}</p>
               </motion.div>
             ))}
           </div>
@@ -162,41 +155,6 @@ export function MlimifertSection() {
 }
 
 /* ---------- Helpers ---------- */
-
-function ComparisonCard({
-  title,
-  items,
-  positive,
-}: {
-  title: string
-  items: string[]
-  positive?: boolean
-}) {
-  return (
-    <div
-      className={`rounded-2xl p-8 shadow-md ${
-        positive ? "bg-primary/10" : "bg-white"
-      }`}
-    >
-      <h4 className="text-2xl font-semibold mb-6 text-[#0c0c0c]">
-        {title}
-      </h4>
-      <ul className="space-y-4">
-        {items.map((item) => (
-          <li key={item} className="flex items-start gap-3">
-            {positive ? (
-              <CheckCircle className="w-6 h-6 text-primary" />
-            ) : (
-              <XCircle className="w-6 h-6 text-gray-400" />
-            )}
-            <span className="text-gray-700">{item}</span>
-          </li>
-        ))}
-      </ul>
-    </div>
-  )
-}
-
 const productBenefits = [
   "Promotes rapid leaf and stem development",
   "Enhances photosynthesis efficiency",
@@ -206,61 +164,17 @@ const productBenefits = [
 ]
 
 const coreValues = [
-  {
-    title: "Efficient Nutrition",
-    description:
-      "Optimized fertilizer formulas designed for effective nutrient absorption.",
-    icon: Leaf,
-  },
-  {
-    title: "Sustainable Growth",
-    description:
-      "Supports long-term soil fertility and sustainable farming practices.",
-    icon: Sprout,
-  },
-  {
-    title: "Higher Productivity",
-    description:
-      "Delivers measurable improvements in crop yield and farm output.",
-    icon: TrendingUp,
-  },
-  {
-    title: "Quality Assurance",
-    description:
-      "Manufactured under strict standards for consistent and reliable results.",
-    icon: ShieldCheck,
-  },
+  { title: "Efficient Nutrition", description: "Optimized fertilizer formulas designed for effective nutrient absorption.", icon: Leaf },
+  { title: "Sustainable Growth", description: "Supports long-term soil fertility and sustainable farming practices.", icon: Sprout },
+  { title: "Higher Productivity", description: "Delivers measurable improvements in crop yield and farm output.", icon: TrendingUp },
+  { title: "Quality Assurance", description: "Manufactured under strict standards for consistent and reliable results.", icon: ShieldCheck },
 ]
 
 const mlimifertBenefits = [
-  {
-    title: "Versatile Crop Use",
-    description:
-      "Suitable for maize, beans, tobacco, and vegetables, enhancing growth and yield.",
-    icon: Leaf,
-  },
-  {
-    title: "Soil Health Improvement",
-    description:
-      "Balances nitrogen levels while promoting microbial activity for healthier soils.",
-    icon: Sprout,
-  },
-  {
-    title: "Consistent Quality",
-    description:
-      "Each batch is tested to maintain uniformity and high performance.",
-    icon: ShieldCheck,
-  },
-  {
-    title: "Farmer Trust & Support",
-    description:
-      "Widely used and recommended by modern farmers in Malawi.",
-    icon: TrendingUp,
-  },
-  {
-    title: "Sustainability Focus",
-    description:
-      "Supports long-term sustainable farming and minimizes environmental impact.",
-    icon: CheckCircle,
-  },
+  { title: "Versatile Crop Use", description: "Suitable for maize, beans, tobacco, and vegetables, enhancing growth and yield.", icon: Leaf },
+  { title: "Soil Health Improvement", description: "Balances nitrogen levels while promoting microbial activity for healthier soils.", icon: Sprout },
+  { title: "Consistent Quality", description: "Each batch is tested to maintain uniformity and high performance.", icon: ShieldCheck },
+  { title: "Farmer Trust & Support", description: "Widely used and recommended by modern farmers in Malawi.", icon: TrendingUp },
+  { title: "Sustainability Focus", description: "Supports long-term sustainable farming and minimizes environmental impact.", icon: CheckCircle },
+  { title: "Water Efficiency", description: "Optimizes water usage by improving soil moisture retention for healthier crops.", icon: Sprout }, // NEW CARD
 ]
